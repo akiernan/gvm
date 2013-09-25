@@ -95,15 +95,15 @@ fi
 gvm_echo_debug "Prime the config file..."
 gvm_config_file="${GVM_DIR}/etc/config"
 touch "${gvm_config_file}"
-if [[ -z $(cat ${gvm_config_file} | grep 'gvm_auto_answer') ]]; then
+if [[ -z $(cat "${gvm_config_file}" | grep 'gvm_auto_answer') ]]; then
 	echo "gvm_auto_answer=false" >> "${gvm_config_file}"
 fi
 
-if [[ -z $(cat ${gvm_config_file} | grep 'gvm_suggestive_selfupdate') ]]; then
+if [[ -z $(cat "${gvm_config_file}" | grep 'gvm_suggestive_selfupdate') ]]; then
 	echo "gvm_suggestive_selfupdate=true" >> "${gvm_config_file}"
 fi
 
-if [[ -z $(cat ${gvm_config_file} | grep 'gvm_auto_selfupdate') ]]; then
+if [[ -z $(cat "${gvm_config_file}" | grep 'gvm_auto_selfupdate') ]]; then
 	echo "gvm_auto_selfupdate=false" >> "${gvm_config_file}"
 fi
 
@@ -114,10 +114,10 @@ gvm_echo_debug "Extract script archive..."
 gvm_echo_debug "Unziping scripts to: ${gvm_stage_folder}"
 if [[ "${cygwin}" == 'true' ]]; then
 	gvm_echo_debug "Cygwin detected - normalizing paths for unzip..."
-	unzip -qo $(cygpath -w "${gvm_tmp_zip}") -d $(cygpath -w "${gvm_stage_folder}")
-else
-	unzip -qo "${gvm_tmp_zip}" -d "${gvm_stage_folder}"
+	gvm_tmp_zip=$(cygpath -w "${gvm_tmp_zip}")
+	gvm_stage_folder=$(cygpath -w "${gvm_stage_folder}")
 fi
+unzip -qo "${gvm_tmp_zip}" -d "${gvm_stage_folder}"
 
 gvm_echo_debug "Moving gvm-init file to bin folder..."
 mv "${gvm_stage_folder}/gvm-init.sh" "${gvm_bin_folder}"
